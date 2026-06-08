@@ -63,4 +63,12 @@ sync && diskutil unmount "/Volumes/CRP DISABLD"
 
 Tested on an M1 Mac, macOS 14.5, against real hardware. This edits an app bundle
 and writes to flash; the LPC's USB ISP bootloader is in ROM and isn't touched, so
-the worst likely outcome is "still doesn't boot," not a brick. No warranty.
+the worst likely outcome is "still doesn't boot," not a brick.
+
+## License and warranty
+
+MIT licensed — see [LICENSE](LICENSE).
+
+There is **no warranty**. This software is provided "as is", and you use it at
+your own risk. The author is not liable for any damage to your hardware,
+software, or data resulting from its use.
