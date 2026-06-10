@@ -65,6 +65,10 @@ sync && diskutil unmount "/Volumes/CRP DISABLD"
 firmware to the community v1.5.3 template, which fixes MIDI dropped/ghost notes
 (e.g. the MIDI polysynth example).
 
+[pbp-format.md](pbp-format.md) — the reverse-engineered `.pbp` patch file
+format, with [`pbp.py`](pbp.py), a tool that dumps/round-trips patch files and
+extracts the patch embedded in a `firmware.bin`.
+
 ## Notes
 
 Tested on an M1 Mac, macOS 14.5, against real hardware. This edits an app bundle
