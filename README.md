@@ -59,6 +59,12 @@ dd if=firmware.bin of="/Volumes/CRP DISABLD/firmware.bin" bs=512 conv=notrunc
 sync && diskutil unmount "/Volumes/CRP DISABLD"
 ```
 
+## Related
+
+[community-firmware.md](community-firmware.md) — optionally upgrade the on-chip
+firmware to the community v1.5.3 template, which fixes MIDI dropped/ghost notes
+(e.g. the MIDI polysynth example).
+
 ## Notes
 
 Tested on an M1 Mac, macOS 14.5, against real hardware. This edits an app bundle
