@@ -88,6 +88,32 @@ firmware to the community v1.5.3 template, which fixes MIDI dropped/ghost notes
 format, with [`pbp.py`](pbp.py), a tool that dumps/round-trips patch files and
 extracts the patch embedded in a `firmware.bin`.
 
+## Headless compiling (no GUI at all)
+
+[`pbc.py`](pbc.py) replicates the IDE's code generation: it turns a `.pbp`
+patch into `main.c` (block structs, functions, wiring, rate handlers), which
+the app's bundled ARM toolchain then compiles. Together with the flash script
+this is a complete GUI-free pipeline:
+
+```sh
+./pbc.py mypatch.pbp main.c
+cp main.c /Applications/Patchblocks.app/Contents/MacOS/compile/firmware/
+(cd /Applications/Patchblocks.app/Contents/MacOS/compile/firmware && ./compile.sh)
+./flash_patchblock.sh       # checksum + in-place write to the connected device
+```
+
+`pbc.py` is validated by reproducing the app's own generated `main.c`
+**byte-for-byte** for reference patches. One deliberate divergence: the app
+demotes generator blocks whose inputs all come from control-rate sources down
+to the 100 Hz control handler (rewriting `SMP_RATE` to `CTL_RATE` in their
+code). That is right for LFOs but produces aliased garbage when the generator
+is an audible oscillator (e.g. a Saw whose pitch comes from a Sequence block);
+`pbc.py` keeps generators at audio rate, which in A/B tests on hardware sounds
+correct where the app's build does not.
+
+`flash_patchblock.sh` (with `lpccrc.py`) flashes any firmware image to a
+connected device: patches the LPC boot checksum and writes in place.
+
 ## Notes
 
 Tested on an M1 Mac, macOS 14.5, against real hardware. This edits an app bundle
