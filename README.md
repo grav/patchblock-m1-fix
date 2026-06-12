@@ -32,6 +32,25 @@ Two steps of the Mac toolchain broke, both needed fixing:
    `cp` deletes and recreates the file, allocating different clusters, so flash
    `0x0` is never reprogrammed. Replaced with `dd … conv=notrunc`.
 
+## Connecting the device
+
+The LPC1343's ROM bootloader only starts at **power-on**, so the device must be
+powered on while USB is already connected to show up as `CRP DISABLD`. On top
+of that, its 2009-era USB mass-storage implementation is flaky on modern macOS:
+sometimes the device enumerates but the disk never attaches (or drops off again
+after a while), traditionally fixed by unplugging and replugging the cable.
+
+`connect_patchblock.sh` automates all of it:
+
+```sh
+./connect_patchblock.sh    # then power the Patchblock ON with USB connected
+```
+
+It waits for the bootloader, mounts the disk if macOS didn't, and if the device
+gets stuck (enumerated but no disk) it forces a software USB re-enumeration —
+the digital equivalent of a replug — via the bundled `usbreplug.c` helper
+(compiled automatically on first run; no sudo needed).
+
 ## What the patcher changes
 
 Inside `<App>.app/Contents/MacOS/compile/firmware/`:
